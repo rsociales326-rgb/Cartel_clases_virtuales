@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula Virtual - Profa. Verónica Hermida</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Outfit:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pastel: {
+                            mint: '#E8F5E9',
+                            mintDark: '#A5D6A7',
+                            lavender: '#EDE7F6',
+                            lavenderDark: '#D1C4E9',
+                            rose: '#FCE4EC',
+                            roseDark: '#F8BBD0',
+                            peach: '#FFF3E0',
+                            blue: '#E1F5FE',
+                            text: '#37474F',
+                            textLight: '#78909C'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                        friendly: ['Fredoka', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background: linear-[#E1F5FE] gradient;
+            background: linear-gradient(135deg, #E8F5E9 0%, #EDE7F6 50%, #E1F5FE 100%);
+            min-height: 100vh;
+            color: #37474F;
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism effects */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+        }
+
+        .glass-input {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(165, 214, 167, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .glass-input:focus {
+            background: #ffffff;
+            border-color: #7E57C2;
+            box-shadow: 0 0 0 4px rgba(126, 87, 194, 0.15);
+            outline: none;
+        }
+
+        /* Smooth Floating Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(1deg); }
+        }
+
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(-1.5deg); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.03); }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .animate-float-slow {
+            animation: floatSlow 9s ease-in-out infinite;
+        }
+
+        .animate-pulse-glow {
+            animation: pulseGlow 3s ease-in-out infinite;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.3);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(126, 87, 194, 0.3);
+            border-radius: 10px;
+        }
+
+        /* Hide controls when in clean display mode */
+        .fullscreen-clean .control-panel,
+        .fullscreen-clean .edit-controls,
+        .fullscreen-clean .quick-presets,
+        .fullscreen-clean .theme-selector {
+            display: none !important;
+        }
+
+        /* Aspect ratio 16:9 container guard */
+        .zoom-aspect-container {
+            max-width: 1400px;
+            aspect-ratio: 16/9;
+        }
+
+        @media (max-aspect-ratio: 16/9) {
+            .zoom-aspect-container {
+                aspect-ratio: auto;
+            }
+        }
+    </style>
+</head>
+<body class="flex flex-col justify-between min-h-screen p-4 sm:p-6 lg:p-8 relative">
+
+    <!-- Floating Background Decorative Elements -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div class="absolute -top-10 -left-10 w-72 h-72 bg-purple-200/40 rounded-full blur-3xl animate-float-slow"></div>
+        <div class="absolute top-1/2 -right-10 w-80 h-80 bg-green-200/40 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute -bottom-10 left-1/3 w-96 h-96 bg-blue-200/40 rounded-full blur-3xl animate-float-slow"></div>
+        
+        <!-- Subtle Academic SVGs -->
+        <svg class="absolute top-12 left-12 w-16 h-16 text-indigo-300/30 animate-float" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
+        <svg class="absolute bottom-16 right-16 w-20 h-20 text-emerald-300/30 animate-float-slow" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+    </div>
+
+    <!-- MAIN APP WRAPPER -->
+    <div id="appContainer" class="relative z-10 w-full max-w-7xl mx-auto flex-1 flex flex-col justify-between transition-all duration-300">
+
+        <!-- TOP HEADER: Controls & Teacher Title -->
+        <header class="w-full flex flex-wrap justify-between items-center gap-4 mb-4">
+            
+            <!-- Live Clock Widget -->
+            <div class="glass-card px-4 py-2 rounded-2xl flex items-center space-x-3 text-slate-700 shadow-sm">
+                <i class="fa-regular fa-clock text-indigo-500 text-lg"></i>
+                <span id="liveClock" class="font-semibold tracking-wider text-sm sm:text-base">00:00:00 AM</span>
+                <span class="text-xs bg-indigo-100 text-indigo-700 font-medium px-2 py-0.5 rounded-full">Hora en vivo</span>
+            </div>
+
+            <!-- Teacher Name Banner (Primary Heading) -->
+            <div class="glass-card px-6 py-2.5 rounded-2xl border-l-4 border-indigo-400 text-center shadow-sm hover:shadow-md transition-all">
+                <span class="text-xs uppercase tracking-widest text-indigo-600 font-bold block">Aula Virtual</span>
+                <h1 class="text-2xl sm:text-3xl font-serif font-bold text-slate-800 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-graduation-cap text-indigo-500 text-xl sm:text-2xl"></i>
+                    <span>Profa. Verónica Hermida</span>
+                </h1>
+            </div>
+
+            <!-- Header Action Controls -->
+            <div class="control-panel flex items-center gap-2">
+                <button onclick="toggleCleanMode()" id="cleanModeBtn" title="Ocultar paneles de edición para compartir pantalla limpia" class="glass-card hover:bg-white text-indigo-700 font-medium px-4 py-2 rounded-xl text-sm flex items-center gap-2 transition-all shadow-sm hover:scale-105 active:scale-95">
+                    <i class="fa-solid fa-expand text-indigo-500"></i>
+                    <span id="cleanBtnText" class="hidden sm:inline">Modo Presentación</span>
+                </button>
+                <button onclick="toggleSettingsModal()" class="glass-card hover:bg-white text-slate-700 p-2.5 rounded-xl text-sm transition-all shadow-sm hover:scale-105 active:scale-95">
+                    <i class="fa-solid fa-gear text-slate-500"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="my-auto py-4 flex flex-col items-center justify-center">
+            
+            <div class="w-full max-w-4xl glass-card rounded-3xl p-6 sm:p-10 text-center shadow-xl relative overflow-hidden transition-all duration-500 border border-white/80">
+                
+                <!-- Decorative Top Tag -->
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100/80 text-emerald-800 text-sm font-medium mb-6 animate-pulse-glow">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                    <span>Actividad en Curso</span>
+                </div>
+
+                <!-- Central Question Title -->
+                <h2 class="text-2xl sm:text-4xl md:text-5xl font-friendly font-semibold text-slate-700 tracking-tight mb-6">
+                    Estamos trabajando en...
+                </h2>
+
+                <!-- EDITABLE ACTIVITY AREA -->
+                <div class="relative group my-2">
+                    <!-- Dynamic Textarea Input -->
+                    <textarea 
+                        id="activityInput" 
+                        rows="3" 
+                        placeholder="Escribe aquí la actividad o tema del momento (ej: Lectura comprensiva págs 42 a 45 y resolución de ejercicios)..." 
+                        class="glass-input w-full p-4 sm:p-6 rounded-2xl text-xl sm:text-2xl md:text-3xl text-center font-sans text-indigo-900 placeholder:text-slate-400 placeholder:font-light font-medium resize-none shadow-inner leading-relaxed transition-all"
+                        oninput="autoResizeTextarea(this)"
+                    >Análisis de lectura y resolución de la guía de trabajo en equipos</textarea>
+
+                    <!-- Quick Clear Button -->
+                    <button 
+                        onclick="clearActivityText()" 
+                        title="Borrar texto" 
+                        class="edit-controls absolute right-3 top-3 text-slate-400 hover:text-rose-500 bg-white/80 hover:bg-rose-50 p-2 rounded-xl transition-all shadow-sm opacity-80 group-hover:opacity-100"
+                    >
+                        <i class="fa-solid fa-trash-can text-base"></i>
+                    </button>
+                </div>
+
+                <!-- TIMER & COUNTDOWN SECTION -->
+                <div class="mt-8 pt-6 border-t border-slate-200/60 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    
+                    <!-- Timer Display -->
+                    <div class="flex items-center gap-3">
+                        <div id="timerContainer" class="glass-card px-5 py-2.5 rounded-2xl flex items-center gap-3 border border-indigo-100">
+                            <i class="fa-solid fa-hourglass-half text-amber-500 text-lg animate-spin-slow"></i>
+                            <span id="timerDisplay" class="font-mono text-2xl font-bold text-slate-800 tracking-wider">10:00</span>
+                        </div>
+                        
+                        <!-- Timer Quick Controls -->
+                        <div class="edit-controls flex gap-1">
+                            <button onclick="toggleTimer()" id="startTimerBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white p-2.5 rounded-xl transition-all shadow-sm">
+                                <i class="fa-solid fa-play text-xs"></i>
+                            </button>
+                            <button onclick="resetTimer()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 p-2.5 rounded-xl transition-all shadow-sm">
+                                <i class="fa-solid fa-rotate-right text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Preset Time Selector Buttons -->
+                    <div class="edit-controls flex flex-wrap gap-1.5">
+                        <button onclick="setTimerMinutes(3)" class="text-xs font-semibold bg-white/80 hover:bg-indigo-50 text-indigo-700 px-2.5 py-1.5 rounded-lg border border-indigo-100">+3m</button>
+                        <button onclick="setTimerMinutes(5)" class="text-xs font-semibold bg-white/80 hover:bg-indigo-50 text-indigo-700 px-2.5 py-1.5 rounded-lg border border-indigo-100">+5m</button>
+                        <button onclick="setTimerMinutes(10)" class="text-xs font-semibold bg-white/80 hover:bg-indigo-50 text-indigo-700 px-2.5 py-1.5 rounded-lg border border-indigo-100">+10m</button>
+                        <button onclick="setTimerMinutes(15)" class="text-xs font-semibold bg-white/80 hover:bg-indigo-50 text-indigo-700 px-2.5 py-1.5 rounded-lg border border-indigo-100">+15m</button>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <!-- BOTTOM FOOTER: Encouraging Message & Illustrations -->
+        <footer class="w-full mt-4 flex flex-col md:flex-row items-center justify-between gap-6">
+            
+            <!-- Student Illustration / Visual Element Left -->
+            <div class="hidden md:flex items-center gap-3 glass-card p-3 px-5 rounded-2xl max-w-xs">
+                <div class="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 text-xl font-bold">
+                    ✍️
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-slate-700">¡Concentración activa!</p>
+                    <p class="text-xs text-slate-500">Toma nota de tus dudas para compartirlas.</p>
+                </div>
+            </div>
+
+            <!-- Central Encouraging Message Banner -->
+            <div class="glass-card px-8 py-4 rounded-2xl text-center max-w-2xl mx-auto shadow-sm border-t-2 border-purple-300">
+                <p id="bottomMessage" class="text-base sm:text-lg md:text-xl font-medium text-slate-700 flex items-center justify-center gap-2">
+                    <span>En unos minutos compartimos nuestras respuestas y comentarios</span>
+                    <span class="text-amber-500">✨</span>
+                </p>
+            </div>
+
+            <!-- Student Illustration / Visual Element Right -->
+            <div class="hidden md:flex items-center gap-3 glass-card p-3 px-5 rounded-2xl max-w-xs">
+                <div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 text-xl font-bold">
+                    💬
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-slate-700">Espacio de diálogo</p>
+                    <p class="text-xs text-slate-500">Pronto abriremos micrófonos y chat.</p>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Floating Alert / Zoom Banner Control Indicator -->
+    <div id="presentationModeBadge" class="hidden fixed bottom-6 right-6 z-50 glass-card bg-slate-900/90 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3">
+        <span class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="text-sm font-medium">Modo Presentación Activo</span>
+        <button onclick="toggleCleanMode()" class="ml-2 bg-white/20 hover:bg-white/30 text-white text-xs px-3 py-1.5 rounded-lg transition-all">
+            Salir <i class="fa-solid fa-compress ml-1"></i>
+        </button>
+    </div>
+
+    <!-- CONFIGURATION MODAL -->
+    <div id="settingsModal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass-card bg-white/95 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative">
+            <button onclick="toggleSettingsModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-2">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            
+            <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-sliders text-indigo-600"></i> Personalización del Cartel
+            </h3>
+
+            <div class="space-y-4">
+                <!-- Change Bottom Message -->
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Mensaje Inferior</label>
+                    <input 
+                        type="text" 
+                        id="customBottomInput" 
+                        value="En unos minutos compartimos nuestras respuestas y comentarios ✨" 
+                        class="w-full p-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-indigo-500"
+                        oninput="updateBottomMessage(this.value)"
+                    />
+                </div>
+
+                <!-- Theme Color Palette Selector -->
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Gama de Colores Pastel</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="changeTheme('mint')" class="p-3 rounded-xl bg-emerald-100 border border-emerald-300 text-xs font-semibold text-emerald-800 hover:scale-105 transition-all">Verde Menta</button>
+                        <button onclick="changeTheme('lavender')" class="p-3 rounded-xl bg-purple-100 border border-purple-300 text-xs font-semibold text-purple-800 hover:scale-105 transition-all">Lavanda</button>
+                        <button onclick="changeTheme('rose')" class="p-3 rounded-xl bg-pink-100 border border-pink-300 text-xs font-semibold text-pink-800 hover:scale-105 transition-all">Rosa Cálido</button>
+                    </div>
+                </div>
+
+                <!-- Audio Notification Toggle -->
+                <div class="flex items-center justify-between pt-2">
+                    <span class="text-sm font-medium text-slate-700">Sonido al terminar tiempo</span>
+                    <input type="checkbox" id="soundToggle" checked class="w-5 h-5 accent-indigo-600 cursor-pointer">
+                </div>
+            </div>
+
+            <button onclick="toggleSettingsModal()" class="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition-all">
+                Guardar y Cerrar
+            </button>
+        </div>
+    </div>
+
+    <script>
+        /* === LIVE DIGITAL CLOCK === */
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            
+            hours = hours % 12;
+            hours = hours ? hours : 12; // Standard 12-hour format
+            const timeString = `${String(hours).padStart(2, '0')}:${minutes}:${seconds} ${ampm}`;
+            
+            document.getElementById('liveClock').textContent = timeString;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        /* === TEXTAREA AUTO-RESIZE & EDIT CONTROLS === */
+        function autoResizeTextarea(element) {
+            element.style.height = 'auto';
+            element.style.height = (element.scrollHeight) + 'px';
+        }
+
+        function clearActivityText() {
+            const input = document.getElementById('activityInput');
+            input.value = '';
+            input.focus();
+            autoResizeTextarea(input);
+        }
+
+        /* === TIMER / COUNTDOWN LOGIC === */
+        let timerSeconds = 600; // 10 minutes default
+        let timerInterval = null;
+        let isTimerRunning = false;
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(timerSeconds / 60);
+            const secs = timerSeconds % 60;
+            const display = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            document.getElementById('timerDisplay').textContent = display;
+        }
+
+        function toggleTimer() {
+            const btn = document.getElementById('startTimerBtn');
+            if (isTimerRunning) {
+                clearInterval(timerInterval);
+                isTimerRunning = false;
+                btn.innerHTML = '<i class="fa-solid fa-play text-xs"></i>';
+                btn.classList.replace('bg-amber-500', 'bg-indigo-600');
+            } else {
+                if (timerSeconds <= 0) timerSeconds = 300;
+                isTimerRunning = true;
+                btn.innerHTML = '<i class="fa-solid fa-pause text-xs"></i>';
+                btn.classList.replace('bg-indigo-600', 'bg-amber-500');
+                
+                timerInterval = setInterval(() => {
+                    if (timerSeconds > 0) {
+                        timerSeconds--;
+                        updateTimerDisplay();
+                    } else {
+                        clearInterval(timerInterval);
+                        isTimerRunning = false;
+                        btn.innerHTML = '<i class="fa-solid fa-play text-xs"></i>';
+                        btn.classList.replace('bg-amber-500', 'bg-indigo-600');
+                        playTimerEndSound();
+                    }
+                }, 1000);
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
+            timerSeconds = 600;
+            updateTimerDisplay();
+            const btn = document.getElementById('startTimerBtn');
+            btn.innerHTML = '<i class="fa-solid fa-play text-xs"></i>';
+            btn.classList.replace('bg-amber-500', 'bg-indigo-600');
+        }
+
+        function setTimerMinutes(mins) {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
+            timerSeconds = mins * 60;
+            updateTimerDisplay();
+            const btn = document.getElementById('startTimerBtn');
+            btn.innerHTML = '<i class="fa-solid fa-play text-xs"></i>';
+            btn.classList.replace('bg-amber-500', 'bg-indigo-600');
+        }
+
+        function playTimerEndSound() {
+            const soundEnabled = document.getElementById('soundToggle').checked;
+            if (!soundEnabled) return;
+
+            // Tone.js soft gentle chime using Web Audio API
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+                osc.frequency.exponentialRampToValueAtTime(659.25, ctx.currentTime + 0.3); // E5
+                
+                gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.8);
+                
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                
+                osc.start();
+                osc.stop(ctx.currentTime + 0.8);
+            } catch (e) {
+                console.log('Audio playback notice:', e);
+            }
+        }
+
+        /* === PRESENTATION / CLEAN MODE TOGGLE === */
+        function toggleCleanMode() {
+            const body = document.body;
+            const badge = document.getElementById('presentationModeBadge');
+            const cleanBtnText = document.getElementById('cleanBtnText');
+
+            body.classList.toggle('fullscreen-clean');
+            
+            if (body.classList.contains('fullscreen-clean')) {
+                badge.classList.remove('hidden');
+                cleanBtnText.textContent = "Salir de Modo Presentación";
+            } else {
+                badge.classList.add('hidden');
+                cleanBtnText.textContent = "Modo Presentación";
+            }
+        }
+
+        /* === SETTINGS & THEME MODAL LOGIC === */
+        function toggleSettingsModal() {
+            const modal = document.getElementById('settingsModal');
+            modal.classList.toggle('hidden');
+        }
+
+        function updateBottomMessage(newText) {
+            document.getElementById('bottomMessage').innerHTML = `${newText} <span class="text-amber-500">✨</span>`;
+        }
+
+        function changeTheme(themeName) {
+            const body = document.body;
+            if (themeName === 'mint') {
+                body.style.background = 'linear-gradient(135deg, #E8F5E9 0%, #E0F2F1 50%, #E8F5E9 100%)';
+            } else if (themeName === 'lavender') {
+                body.style.background = 'linear-gradient(135deg, #EDE7F6 0%, #E1F5FE 50%, #F3E5F5 100%)';
+            } else if (themeName === 'rose') {
+                body.style.background = 'linear-gradient(135deg, #FCE4EC 0%, #FFF3E0 50%, #F8BBD0 100%)';
+            }
+        }
+
+        // Initialize textarea height on load
+        window.addEventListener('load', () => {
+            const textarea = document.getElementById('activityInput');
+            autoResizeTextarea(textarea);
+        });
+    </script>
+</body>
+</html>
